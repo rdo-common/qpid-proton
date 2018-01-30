@@ -1,6 +1,6 @@
 %global proton_datadir %{_datadir}/proton-%{version}
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} > 7
 %global gem_name qpid_proton
 %endif
 
@@ -17,7 +17,7 @@
 
 Name:           qpid-proton
 Version:        0.18.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Group:          System Environment/Libraries
 Summary:        A high performance, lightweight messaging library
 License:        ASL 2.0
@@ -39,24 +39,24 @@ BuildRequires:  swig
 BuildRequires:  pkgconfig
 BuildRequires:  doxygen
 BuildRequires:  libuuid-devel
-%if (0%{?fedora} && 0%{?fedora} > 25)
+%if 0%{?fedora} > 25 && 0%{?fedora} < 28
 BuildRequires:  compat-openssl10-devel
 %else
 BuildRequires:  openssl-devel
 %endif
-%if 0%{?fedora} 
+%if 0%{?fedora} || 0%{?rhel} > 7
 BuildRequires:  python2-devel
 BuildRequires:  python3-devel
 %endif
-%if 0%{?rhel}
+%if 0%{?rhel} && 0%{?rhel} <= 7
 BuildRequires:  python-devel
 %endif
 BuildRequires:  epydoc
-%if 0%{?fedora}
-%if 0%{?fedora} > 25
+%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} > 25 || 0%{?rhel} > 7
 BuildRequires:  perl-generators
 %endif
-%if 0%{?fedora} > 26
+%if 0%{?fedora} > 26 || 0%{?rhel} > 7
 BuildRequires:  glibc-headers
 %endif
 BuildRequires:  perl(ExtUtils::MakeMaker)
@@ -209,7 +209,7 @@ Obsoletes: qpid-proton-cpp-devel-docs
 %exclude %{proton_datadir}/examples/cpp/*.pyo
 
 
-%if 0%{?rhel}
+%if 0%{?rhel} && 0%{?rhel} <= 7
 %package -n python2-qpid-proton
 %{?python_provide:%python_provide python2-qpid-proton}
 Group:    System Environment/Libraries
@@ -231,7 +231,7 @@ Requires: python
 %endif
 
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} > 7
 %package -n python2-qpid-proton
 %{?python_provide:%python_provide python2-qpid-proton}
 Group:    System Environment/Libraries
@@ -282,7 +282,7 @@ Obsoletes:  python-qpid-proton-doc
 %doc %{proton_datadir}/docs/api-py
 %doc %{proton_datadir}/examples/python
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} > 7
 %package -n perl-qpid-proton
 Summary: Perl language bindings for Qpid Proton messaging framework
 
@@ -305,7 +305,7 @@ Requires:  qpid-proton-c = %{version}-%{release}
 
 %build
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} > 7
 CXX11FLAG=" -Wno-error=format-security"
 %cmake \
     -DPROTON_DISABLE_RPATH=true \
@@ -314,7 +314,7 @@ CXX11FLAG=" -Wno-error=format-security"
     -DSYSINSTALL_PERL=1 \
     .
 %endif
-%if 0%{?rhel}
+%if 0%{?rhel} && 0%{?rhel} <= 7
 %cmake -DPROTON_DISABLE_RPATH=true \
        -DCMAKE_EXE_LINKER_FLAGS="-Wl,-z,relro,-z,now" \
        -DCMAKE_SHARED_LINKER_FLAGS="-Wl,-z,relro" \
@@ -325,7 +325,7 @@ CXX11FLAG=" -Wno-error=format-security"
 %endif
 
 make all docs %{?_smp_mflags}
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} > 7
 (cd proton-c/bindings/python/dist; %py3_build)
 %endif
 
@@ -333,7 +333,7 @@ make all docs %{?_smp_mflags}
 rm -rf %{buildroot}
 
 %make_install
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} > 7
 (cd proton-c/bindings/python/dist; %py3_install)
 %endif
 
@@ -357,7 +357,7 @@ rm -rf %{buildroot}%{_libdir}/java
 rm -rf %{buildroot}%{_libdir}/libproton-jni.so
 rm -rf %{buildroot}%{_datarootdir}/java
 rm -rf %{buildroot}%{_libdir}/proton.cmake
-%if 0%{?rhel}
+%if 0%{?rhel} && 0%{?rhel} <= 7
 rm -rf %{buildroot}%{_libdir}/perl5
 rm -rf %{buildroot}%{_libdir}/php
 rm -rf %{buildroot}%{_libdir}/ruby
@@ -415,7 +415,7 @@ rm -fr %{buildroot}%{proton_datadir}/examples/php
 
 
 %check
-%if 0%{?fedora} 
+%if 0%{?fedora} || 0%{?rhel} > 7
 # check perl bindings
 pushd proton-c/bindings/perl
 make test
@@ -423,6 +423,9 @@ popd
 %endif
 
 %changelog
+* Mon Jan 29 2018 Merlin Mathesius <mmathesi@redhat.com> - 0.18.1-3
+- Cleanup spec file conditionals
+
 * Sun Dec 17 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 0.18.1-2
 - Python 2 binary package renamed to python2-qpid-proton
   See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3
