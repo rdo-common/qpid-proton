@@ -17,7 +17,7 @@
 
 Name:           qpid-proton
 Version:        0.18.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Group:          System Environment/Libraries
 Summary:        A high performance, lightweight messaging library
 License:        ASL 2.0
@@ -423,6 +423,9 @@ popd
 %endif
 
 %changelog
+* Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.18.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Mon Jan 29 2018 Merlin Mathesius <mmathesi@redhat.com> - 0.18.1-3
 - Cleanup spec file conditionals
 
