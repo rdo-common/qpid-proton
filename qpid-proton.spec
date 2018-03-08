@@ -298,7 +298,7 @@ Requires:  qpid-proton-c = %{version}-%{release}
 %build
 
 %if 0%{?fedora}
-export ADDCXXFLAGS=" -Wno-error=format-security"
+export ADDCXXFLAGS=" -Wno-error=format-security -Wno-error=catch-value="
 %cmake \
     -DSYSINSTALL_PYTHON=1 \
     -DSYSINSTALL_PERL=1 \
