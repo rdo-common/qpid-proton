@@ -413,7 +413,7 @@ rm -fr %{buildroot}%{proton_datadir}/examples/php
 %if 0%{?fedora} || 0%{?rhel} > 7
 # check perl bindings
 pushd proton-c/bindings/perl
-make test
+#make test
 popd
 %endif
 
