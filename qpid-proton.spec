@@ -39,11 +39,7 @@ BuildRequires:  swig
 BuildRequires:  pkgconfig
 BuildRequires:  doxygen
 BuildRequires:  libuuid-devel
-%if 0%{?fedora} > 25 && 0%{?fedora} < 28
-BuildRequires:  compat-openssl10-devel
-%else
 BuildRequires:  openssl-devel
-%endif
 %if 0%{?fedora} || 0%{?rhel} > 7
 BuildRequires:  python2-devel
 BuildRequires:  python3-devel
@@ -55,7 +51,6 @@ BuildRequires:  epydoc
 %if 0%{?fedora} || 0%{?rhel} > 7
 BuildRequires:  perl-generators
 BuildRequires:  glibc-headers
-%endif
 BuildRequires:  perl(ExtUtils::MakeMaker)
 BuildRequires:  perl(Test::Exception)
 BuildRequires:  perl(Test::More)
