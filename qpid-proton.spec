@@ -297,9 +297,11 @@ Requires:  qpid-proton-c = %{version}-%{release}
 
 %build
 
+%if 0%{?fedora}
 %cmake \
     -DSYSINSTALL_PYTHON=1 \
     -DSYSINSTALL_PERL=1 \
+    -DSYSINSTALL_BINDINGS=ON \
     -DCMAKE_SKIP_RPATH:BOOL=OFF \
     .
 %endif
