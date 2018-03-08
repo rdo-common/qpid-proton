@@ -16,7 +16,7 @@
 }
 
 Name:           qpid-proton
-Version:        0.18.1
+Version:        0.21.0
 Release:        1%{?dist}
 Group:          System Environment/Libraries
 Summary:        A high performance, lightweight messaging library
@@ -53,10 +53,7 @@ BuildRequires:  python-devel
 %endif
 BuildRequires:  epydoc
 %if 0%{?fedora}
-%if 0%{?fedora} > 25
 BuildRequires:  perl-generators
-%endif
-%if 0%{?fedora} > 26
 BuildRequires:  glibc-headers
 %endif
 BuildRequires:  perl(ExtUtils::MakeMaker)
@@ -305,21 +302,20 @@ Requires:  qpid-proton-c = %{version}-%{release}
 %build
 
 %if 0%{?fedora}
-CXX11FLAG=" -Wno-error=format-security"
 %cmake \
-    -DPROTON_DISABLE_RPATH=true \
-   "-DCMAKE_CXX_FLAGS=$CXXFLAGS $CXX11FLAG" \
     -DSYSINSTALL_PYTHON=1 \
     -DSYSINSTALL_PERL=1 \
+    -DCMAKE_SKIP_RPATH:BOOL=OFF \
     .
 %endif
 %if 0%{?rhel}
-%cmake -DPROTON_DISABLE_RPATH=true \
+%cmake \
        -DCMAKE_EXE_LINKER_FLAGS="-Wl,-z,relro,-z,now" \
        -DCMAKE_SHARED_LINKER_FLAGS="-Wl,-z,relro" \
        -DCMAKE_MODULE_LINKER_FLAGS="-Wl,-z,relro" \
        -DSYSINSTALL_BINDINGS=ON \
        -DBUILD_PERL=OFF \
+       -DCMAKE_SKIP_RPATH:BOOL=OFF \
        .
 %endif
 
@@ -404,6 +400,7 @@ rm -f  %{buildroot}%{proton_datadir}/examples/cpp/message_properties
 rm -f  %{buildroot}%{proton_datadir}/examples/cpp/multithreaded_client
 rm -f  %{buildroot}%{proton_datadir}/examples/cpp/multithreaded_client_flow_control
 rm -f  %{buildroot}%{proton_datadir}/examples/cpp/reconnect_client
+rm -f  %{buildroot}%{proton_datadir}/examples/cpp/colour_send
 rm -fr %{buildroot}%{proton_datadir}/examples/engine/java
 rm -fr %{buildroot}%{proton_datadir}/examples/go
 rm -fr %{buildroot}%{proton_datadir}/examples/java
@@ -422,6 +419,9 @@ popd
 %endif
 
 %changelog
+* Thu Mar  8 2018 Irina Boverman <iboverma@redhat.com> - 0.21.0-1
+- Rebased to 0.21.0
+
 * Thu Nov 16 2017 Irina Boverman <iboverma@redhat.com> - 0.18.1-1
 - Rebased to 0.18.1
 
