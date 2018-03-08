@@ -298,11 +298,13 @@ Requires:  qpid-proton-c = %{version}-%{release}
 %build
 
 %if 0%{?fedora}
+export ADDCXXFLAGS=" -Wno-error=format-security"
 %cmake \
     -DSYSINSTALL_PYTHON=1 \
     -DSYSINSTALL_PERL=1 \
     -DSYSINSTALL_BINDINGS=ON \
     -DCMAKE_SKIP_RPATH:BOOL=OFF \
+    "-DCMAKE_CXX_FLAGS=$CXXFLAGS $ADDCXXFLAGS" \
     .
 %endif
 %if 0%{?rhel} && 0%{?rhel} <= 7
