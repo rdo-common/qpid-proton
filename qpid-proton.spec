@@ -274,7 +274,7 @@ Obsoletes:  python-qpid-proton-doc
 %doc %{proton_datadir}/docs/api-py
 %doc %{proton_datadir}/examples/python
 
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} < 29 || 0%{?rhel} > 7
 %package -n perl-qpid-proton
 Summary: Perl language bindings for Qpid Proton messaging framework
 
