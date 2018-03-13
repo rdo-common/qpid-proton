@@ -172,9 +172,7 @@ Obsoletes: qpid-proton-c-devel-docs
 %doc %{proton_datadir}/examples/c/*.h
 %doc %{proton_datadir}/examples/c/README.dox
 %doc %{proton_datadir}/examples/c/CMakeLists.txt
-%doc %{proton_datadir}/examples/c/example_test.py
-%exclude %{proton_datadir}/examples/c/*.pyc
-%exclude %{proton_datadir}/examples/c/*.pyo
+%doc %{proton_datadir}/examples/c/example_test.py*
 
 
 %package   cpp-docs
@@ -195,7 +193,7 @@ Obsoletes: qpid-proton-cpp-devel-docs
 %doc %{proton_datadir}/examples/cpp/*.hpp
 %doc %{proton_datadir}/examples/cpp/README.dox
 %doc %{proton_datadir}/examples/cpp/CMakeLists.txt
-%doc %{proton_datadir}/examples/cpp/example_test.py
+%doc %{proton_datadir}/examples/cpp/example_test.py*
 %doc %{proton_datadir}/examples/cpp/ssl_certs
 %doc %{proton_datadir}/examples/cpp/tutorial.dox
 
