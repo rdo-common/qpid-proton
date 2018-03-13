@@ -1,8 +1,5 @@
 %global proton_datadir %{_datadir}/proton-%{version}
-
-%if 0%{?fedora} || 0%{?rhel} > 7
 %global gem_name qpid_proton
-%endif
 
 # per https://fedoraproject.org/wiki/Packaging:AutoProvidesAndRequiresFiltering#Preventing_files.2Fdirectories_from_being_scanned_for_deps_.28pre-scan_filtering.29
 %global __provides_exclude_from ^%{proton_datadir}/examples/.*$
@@ -14,6 +11,13 @@
 %filter_requires_in %{proton_datadir}/examples/
 %filter_setup
 }
+
+%global pythonx python2
+
+%{!?__python2:%global __python2 %{__python}}
+%{!?__python2:%global python2_sitelib %{python_sitelib}}
+%{!?__python2:%global python2_sitearch %{python_sitearch}}
+%{!?__python2:%global pythonx python}
 
 Name:           qpid-proton
 Version:        0.21.0
@@ -40,12 +44,9 @@ BuildRequires:  pkgconfig
 BuildRequires:  doxygen
 BuildRequires:  libuuid-devel
 BuildRequires:  openssl-devel
+BuildRequires: %{pythonx}-devel
 %if 0%{?fedora} || 0%{?rhel} > 7
-BuildRequires:  python2-devel
 BuildRequires:  python3-devel
-%endif
-%if 0%{?rhel} && 0%{?rhel} <= 7
-BuildRequires:  python-devel
 %endif
 BuildRequires:  epydoc
 %if 0%{?fedora} || 0%{?rhel} > 7
@@ -197,51 +198,32 @@ Obsoletes: qpid-proton-cpp-devel-docs
 %doc %{proton_datadir}/examples/cpp/example_test.py
 %doc %{proton_datadir}/examples/cpp/ssl_certs
 %doc %{proton_datadir}/examples/cpp/tutorial.dox
-%exclude %{proton_datadir}/examples/cpp/*.pyc
-%exclude %{proton_datadir}/examples/cpp/*.pyo
 
 
-%if 0%{?rhel} && 0%{?rhel} <= 7
-%package -n python2-qpid-proton
+%package -n %{pythonx}-qpid-proton
+%if 0%{fedora} || 0%{?rhel} > 7
 %{?python_provide:%python_provide python2-qpid-proton}
+%endif
 Group:    System Environment/Libraries
 Summary:  Python language bindings for the Qpid Proton messaging framework
 
 Requires: qpid-proton-c%{?_isa} = %{version}-%{release}
-Requires: python
+Requires: %{pythonx}
 
-%description -n python2-qpid-proton
+%description -n %{pythonx}-qpid-proton
 %{summary}.
 
-%files -n python2-qpid-proton
+%files -n %{pythonx}-qpid-proton
 %defattr(-,root,root,-)
 %license %{proton_licensedir}/LICENSE
 %license %{proton_licensedir}/licenses.xml
-%{python_sitearch}/_cproton.so
-%{python_sitearch}/cproton.*
-%{python_sitearch}/proton/*
+%{python2_sitearch}/_cproton.so
+%{python2_sitearch}/cproton.*
+%{python2_sitearch}/proton/*
 %endif
 
 
 %if 0%{?fedora} || 0%{?rhel} > 7
-%package -n python2-qpid-proton
-%{?python_provide:%python_provide python2-qpid-proton}
-Group:    System Environment/Libraries
-Summary:  Python language bindings for the Qpid Proton messaging framework
-
-Requires: qpid-proton-c%{?_isa} = %{version}-%{release}
-Requires: python2
-
-%description -n python2-qpid-proton
-%{summary}.
-
-%files -n python2-qpid-proton
-%defattr(-,root,root,-)
-%license %{proton_licensedir}/LICENSE
-%license %{proton_licensedir}/licenses.xml
-%{python2_sitearch}/*
-
-
 %package -n python3-qpid-proton
 Group:    System Environment/Libraries
 Summary:  Python language bindings for the Qpid Proton messaging framework
@@ -255,7 +237,9 @@ Requires: python3
 
 %files -n python3-qpid-proton
 %defattr(-,root,root,-)
-%{python3_sitearch}/*
+%{python3_sitearch}/_cproton.so
+%{python3_sitearch}/cproton.*
+%{python3_sitearch}/proton/*
 %endif
 
 %package -n python-qpid-proton-docs
