@@ -217,9 +217,7 @@ Requires: %{pythonx}
 %defattr(-,root,root,-)
 %license %{proton_licensedir}/LICENSE
 %license %{proton_licensedir}/licenses.xml
-%{python2_sitearch}/_cproton.so
-%{python2_sitearch}/cproton.*
-%{python2_sitearch}/proton/*
+%{python2_sitearch}/*
 
 
 %if 0%{?fedora} || 0%{?rhel} > 7
@@ -236,9 +234,7 @@ Requires: python3
 
 %files -n python3-qpid-proton
 %defattr(-,root,root,-)
-%{python3_sitearch}/_cproton.so
-%{python3_sitearch}/cproton.*
-%{python3_sitearch}/proton/*
+%{python3_sitearch}/*
 %endif
 
 %package -n python-qpid-proton-docs
