@@ -220,7 +220,6 @@ Requires: %{pythonx}
 %{python2_sitearch}/_cproton.so
 %{python2_sitearch}/cproton.*
 %{python2_sitearch}/proton/*
-%endif
 
 
 %if 0%{?fedora} || 0%{?rhel} > 7
