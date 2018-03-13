@@ -49,7 +49,8 @@ BuildRequires: %{pythonx}-devel
 BuildRequires:  python3-devel
 %endif
 BuildRequires:  epydoc
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora}
+BuildRequires:  perl-devel
 BuildRequires:  perl-generators
 BuildRequires:  glibc-headers
 BuildRequires:  perl(ExtUtils::MakeMaker)
@@ -251,7 +252,7 @@ Obsoletes:  python-qpid-proton-doc
 %doc %{proton_datadir}/docs/api-py
 %doc %{proton_datadir}/examples/python
 
-%if 0%{?fedora} < 29 || 0%{?rhel} > 7
+%if 0%{?fedora}
 %package -n perl-qpid-proton
 Summary: Perl language bindings for Qpid Proton messaging framework
 
@@ -328,7 +329,7 @@ rm -rf %{buildroot}%{_libdir}/java
 rm -rf %{buildroot}%{_libdir}/libproton-jni.so
 rm -rf %{buildroot}%{_datarootdir}/java
 rm -rf %{buildroot}%{_libdir}/proton.cmake
-%if 0%{?rhel} && 0%{?rhel} <= 7
+%if 0%{?rhel}
 rm -rf %{buildroot}%{_libdir}/perl5
 rm -rf %{buildroot}%{_libdir}/php
 rm -rf %{buildroot}%{_libdir}/ruby
@@ -387,7 +388,7 @@ rm -fr %{buildroot}%{proton_datadir}/examples/php
 
 
 %check
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora}
 # check perl bindings
 pushd proton-c/bindings/perl
 #make test
@@ -395,7 +396,7 @@ popd
 %endif
 
 %changelog
-* Thu Mar  8 2018 Irina Boverman <iboverma@redhat.com> - 0.21.0-1
+* Tue Mar 13 2018 Irina Boverman <iboverma@redhat.com> - 0.21.0-1
 - Rebased to 0.21.0
 
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.18.1-4
