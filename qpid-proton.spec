@@ -200,9 +200,7 @@ Obsoletes: qpid-proton-cpp-devel-docs
 
 
 %package -n %{pythonx}-qpid-proton
-%if 0%{fedora} || 0%{?rhel} > 7
 %{?python_provide:%python_provide python2-qpid-proton}
-%endif
 Group:    System Environment/Libraries
 Summary:  Python language bindings for the Qpid Proton messaging framework
 
