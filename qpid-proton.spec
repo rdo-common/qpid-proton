@@ -21,7 +21,7 @@
 
 Name:           qpid-proton
 Version:        0.21.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Group:          System Environment/Libraries
 Summary:        A high performance, lightweight messaging library
 License:        ASL 2.0
@@ -394,6 +394,9 @@ popd
 %endif
 
 %changelog
+* Thu Jun 28 2018 Jitka Plesnikova <jplesnik@redhat.com> - 0.21.0-3
+- Perl 5.28 rebuild
+
 * Tue Jun 19 2018 Miro Hrončok <mhroncok@redhat.com> - 0.21.0-2
 - Rebuilt for Python 3.7
 
