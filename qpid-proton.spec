@@ -304,7 +304,7 @@ rm -rf %{buildroot}
 
 CPROTON_BUILD=$PWD . ./config.sh
 
-chmod +x %{buildroot}%{python_sitearch}/_cproton.so
+#chmod +x %{buildroot}%{python_sitearch}/_cproton.so
 #find %{buildroot}%{proton_datadir}/examples/ -type f | xargs chmod -x 
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
