@@ -291,7 +291,7 @@ export ADDCXXFLAGS=" -Wno-error=format-security -Wno-error=catch-value="
 
 make all docs %{?_smp_mflags}
 %if 0%{?fedora} || 0%{?rhel} > 7
-(cd proton-c/bindings/python/dist; %py3_build)
+(cd python/dist; %py3_build)
 %endif
 
 %install
@@ -299,7 +299,7 @@ rm -rf %{buildroot}
 
 %make_install
 %if 0%{?fedora} || 0%{?rhel} > 7
-(cd proton-c/bindings/python/dist; %py3_install)
+(cd python/dist; %py3_install)
 %endif
 
 CPROTON_BUILD=$PWD . ./config.sh
