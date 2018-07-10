@@ -78,7 +78,6 @@ Obsoletes: qpid-proton
 
 
 %files c
-%defattr(-,root,root,-)
 %dir %{proton_datadir}
 %license %{proton_licensedir}/LICENSE
 %license %{proton_licensedir}/licenses.xml
@@ -101,7 +100,6 @@ Requires:  qpid-proton-c%{?_isa} = %{version}-%{release}
 %{summary}.
 
 %files cpp
-%defattr(-,root,root,-)
 %dir %{proton_datadir}
 %license %{proton_licensedir}/LICENSE
 %license %{proton_licensedir}/licenses.xml
@@ -123,7 +121,6 @@ Obsoletes: qpid-proton-devel
 %{summary}.
 
 %files c-devel
-%defattr(-,root,root,-)
 %{_includedir}/proton
 %exclude %{_includedir}/proton/*.hpp
 %exclude %{_includedir}/proton/**/*.hpp
@@ -146,7 +143,6 @@ Summary:   Development libraries for writing messaging apps with Qpid Proton
 %{summary}.
 
 %files cpp-devel
-%defattr(-,root,root,-)
 %{_includedir}/proton/*.hpp
 %{_includedir}/proton/**/*.hpp
 %{_libdir}/pkgconfig/libqpid-proton-cpp.pc
@@ -164,7 +160,6 @@ Obsoletes: qpid-proton-c-devel-docs
 %{summary}.
 
 %files c-docs
-%defattr(-,root,root,-)
 %license %{proton_licensedir}/LICENSE
 %license %{proton_licensedir}/licenses.xml
 %doc %{proton_datadir}/docs/api-c
@@ -186,7 +181,6 @@ Obsoletes: qpid-proton-cpp-devel-docs
 %{summary}.
 
 %files cpp-docs
-%defattr(-,root,root,-)
 %license %{proton_licensedir}/LICENSE
 %license %{proton_licensedir}/licenses.xml
 %{proton_datadir}/docs/api-cpp
@@ -211,7 +205,6 @@ Requires: %{pythonx}
 %{summary}.
 
 %files -n %{pythonx}-qpid-proton
-%defattr(-,root,root,-)
 %license %{proton_licensedir}/LICENSE
 %license %{proton_licensedir}/licenses.xml
 %{python2_sitearch}/*
@@ -230,7 +223,6 @@ Requires: python3
 %{summary}.
 
 %files -n python3-qpid-proton
-%defattr(-,root,root,-)
 %{python3_sitearch}/*
 %endif
 
@@ -244,7 +236,6 @@ Obsoletes:  python-qpid-proton-doc
 %{summary}.
 
 %files -n python-qpid-proton-docs
-%defattr(-,root,root,-)
 %license %{proton_licensedir}/LICENSE
 %license %{proton_licensedir}/licenses.xml
 %doc %{proton_datadir}/docs/api-py
