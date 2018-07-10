@@ -57,6 +57,8 @@ BuildRequires:  perl(Test::Exception)
 BuildRequires:  perl(Test::More)
 %endif
 BuildRequires:  cyrus-sasl-devel
+BuildRequires:  cyrus-sasl-plain
+BuildRequires:  cyrus-sasl-md5
 
 %description
 Proton is a high performance, lightweight messaging library. It can be used in
