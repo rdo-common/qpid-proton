@@ -77,7 +77,6 @@ Obsoletes: qpid-proton
 
 
 %files c
-%defattr(-,root,root,-)
 %dir %{proton_datadir}
 %license %{proton_licensedir}/LICENSE.txt
 %license %{proton_licensedir}/licenses.xml
@@ -100,7 +99,6 @@ Requires:  qpid-proton-c%{?_isa} = %{version}-%{release}
 %{summary}.
 
 %files cpp
-%defattr(-,root,root,-)
 %dir %{proton_datadir}
 %license %{proton_licensedir}/LICENSE.txt
 %license %{proton_licensedir}/licenses.xml
@@ -122,7 +120,6 @@ Obsoletes: qpid-proton-devel
 %{summary}.
 
 %files c-devel
-%defattr(-,root,root,-)
 %{_includedir}/proton
 %exclude %{_includedir}/proton/*.hpp
 %exclude %{_includedir}/proton/**/*.hpp
@@ -145,7 +142,6 @@ Summary:   Development libraries for writing messaging apps with Qpid Proton
 %{summary}.
 
 %files cpp-devel
-%defattr(-,root,root,-)
 %{_includedir}/proton/*.hpp
 %{_includedir}/proton/**/*.hpp
 %{_libdir}/pkgconfig/libqpid-proton-cpp.pc
@@ -229,7 +225,6 @@ Requires: python3
 %{summary}.
 
 %files -n python3-qpid-proton
-%defattr(-,root,root,-)
 %{python3_sitearch}/*
 %endif
 
@@ -397,6 +392,15 @@ popd
 %changelog
 * Tue Jul 10 2018 Irina Boverman <iboverma@redhat.com> - 0.24.0-1
 - Rebased to 0.24.0
+
+* Tue Jul 03 2018 Petr Pisar <ppisar@redhat.com> - 0.21.0-4
+- Perl 5.28 rebuild
+
+* Thu Jun 28 2018 Jitka Plesnikova <jplesnik@redhat.com> - 0.21.0-3
+- Perl 5.28 rebuild
+
+* Tue Jun 19 2018 Miro Hrončok <mhroncok@redhat.com> - 0.21.0-2
+- Rebuilt for Python 3.7
 
 * Tue Mar 13 2018 Irina Boverman <iboverma@redhat.com> - 0.21.0-1
 - Rebased to 0.21.0
