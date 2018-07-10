@@ -270,14 +270,14 @@ Requires:  qpid-proton-c = %{version}-%{release}
 %build
 
 %if 0%{?fedora}
-export ADDCXXFLAGS=" -Wno-error=return-type"
+export ADDCFLAGS=" -Wno-error=return-type"
 %cmake \
     -DSYSINSTALL_PYTHON=1 \
     -DSYSINSTALL_PERL=1 \
     -DSYSINSTALL_BINDINGS=ON \
     -DCMAKE_SKIP_RPATH:BOOL=OFF \
     -DENABLE_FUZZ_TESTING=NO \
-    "-DCMAKE_CXX_FLAGS=$CXXFLAGS $ADDCXXFLAGS" \
+    "-DCMAKE_C_FLAGS=$CFLAGS $ADDCFLAGS" \
     .
 %endif
 %if 0%{?rhel} && 0%{?rhel} <= 7
