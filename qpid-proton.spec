@@ -1,5 +1,4 @@
 %global proton_datadir %{_datadir}/proton-%{version}
-%global gem_name qpid_proton
 
 # per https://fedoraproject.org/wiki/Packaging:AutoProvidesAndRequiresFiltering#Preventing_files.2Fdirectories_from_being_scanned_for_deps_.28pre-scan_filtering.29
 %global __provides_exclude_from ^%{proton_datadir}/examples/.*$
@@ -20,7 +19,7 @@
 %{!?__python2:%global pythonx python}
 
 Name:           qpid-proton
-Version:        0.21.0
+Version:        0.24.0
 Release:        1%{?dist}
 Group:          System Environment/Libraries
 Summary:        A high performance, lightweight messaging library
@@ -80,7 +79,7 @@ Obsoletes: qpid-proton
 %files c
 %defattr(-,root,root,-)
 %dir %{proton_datadir}
-%license %{proton_licensedir}/LICENSE
+%license %{proton_licensedir}/LICENSE.txt
 %license %{proton_licensedir}/licenses.xml
 %doc %{proton_datadir}/README*
 %{_libdir}/libqpid-proton.so.*
@@ -103,7 +102,7 @@ Requires:  qpid-proton-c%{?_isa} = %{version}-%{release}
 %files cpp
 %defattr(-,root,root,-)
 %dir %{proton_datadir}
-%license %{proton_licensedir}/LICENSE
+%license %{proton_licensedir}/LICENSE.txt
 %license %{proton_licensedir}/licenses.xml
 %doc %{proton_datadir}/README*
 %{_libdir}/libqpid-proton-cpp.so.*
@@ -165,10 +164,10 @@ Obsoletes: qpid-proton-c-devel-docs
 
 %files c-docs
 %defattr(-,root,root,-)
-%license %{proton_licensedir}/LICENSE
+%license %{proton_licensedir}/LICENSE.txt
 %license %{proton_licensedir}/licenses.xml
 %doc %{proton_datadir}/docs/api-c
-%doc %{proton_datadir}/examples/c/ssl_certs
+%doc %{proton_datadir}/examples/c/ssl-certs
 %doc %{proton_datadir}/examples/c/*.c
 %doc %{proton_datadir}/examples/c/*.h
 %doc %{proton_datadir}/examples/c/README.dox
@@ -187,7 +186,7 @@ Obsoletes: qpid-proton-cpp-devel-docs
 
 %files cpp-docs
 %defattr(-,root,root,-)
-%license %{proton_licensedir}/LICENSE
+%license %{proton_licensedir}/LICENSE.txt
 %license %{proton_licensedir}/licenses.xml
 %{proton_datadir}/docs/api-cpp
 %doc %{proton_datadir}/examples/cpp/*.cpp
@@ -195,7 +194,7 @@ Obsoletes: qpid-proton-cpp-devel-docs
 %doc %{proton_datadir}/examples/cpp/README.dox
 %doc %{proton_datadir}/examples/cpp/CMakeLists.txt
 %doc %{proton_datadir}/examples/cpp/example_test.py*
-%doc %{proton_datadir}/examples/cpp/ssl_certs
+%doc %{proton_datadir}/examples/cpp/ssl-certs
 %doc %{proton_datadir}/examples/cpp/tutorial.dox
 
 
@@ -212,7 +211,7 @@ Requires: %{pythonx}
 
 %files -n %{pythonx}-qpid-proton
 %defattr(-,root,root,-)
-%license %{proton_licensedir}/LICENSE
+%license %{proton_licensedir}/LICENSE.txt
 %license %{proton_licensedir}/licenses.xml
 %{python2_sitearch}/*
 
@@ -245,7 +244,7 @@ Obsoletes:  python-qpid-proton-doc
 
 %files -n python-qpid-proton-docs
 %defattr(-,root,root,-)
-%license %{proton_licensedir}/LICENSE
+%license %{proton_licensedir}/LICENSE.txt
 %license %{proton_licensedir}/licenses.xml
 %doc %{proton_datadir}/docs/api-py
 %doc %{proton_datadir}/examples/python
@@ -261,7 +260,7 @@ Requires:  qpid-proton-c = %{version}-%{release}
 %{summary}.
 
 %files -n perl-qpid-proton
-%doc LICENSE README*
+%doc LICENSE.txt README*
 %{perl_vendorarch}/*
 %endif
 
@@ -280,7 +279,7 @@ export ADDCXXFLAGS=" -Wno-error=format-security -Wno-error=catch-value="
     -DSYSINSTALL_PERL=1 \
     -DSYSINSTALL_BINDINGS=ON \
     -DCMAKE_SKIP_RPATH:BOOL=OFF \
-    "-DCMAKE_CXX_FLAGS=$CXXFLAGS $ADDCXXFLAGS" \
+    -DENABLE_FUZZ_TESTING=NO \
     .
 %endif
 %if 0%{?rhel} && 0%{?rhel} <= 7
@@ -291,6 +290,7 @@ export ADDCXXFLAGS=" -Wno-error=format-security -Wno-error=catch-value="
        -DSYSINSTALL_BINDINGS=ON \
        -DBUILD_PERL=OFF \
        -DCMAKE_SKIP_RPATH:BOOL=OFF \
+       -DENABLE_FUZZ_TESTING=NO \
        .
 %endif
 
@@ -317,8 +317,8 @@ install -pm 644 %{SOURCE1} %{buildroot}%{proton_datadir}/
 %else
 install -dm 755 %{buildroot}%{proton_licensedir}
 install -pm 644 %{SOURCE1} %{buildroot}%{proton_licensedir}
-install -pm 644 %{buildroot}%{proton_datadir}/LICENSE %{buildroot}%{proton_licensedir}
-rm -f %{buildroot}%{proton_datadir}/LICENSE
+install -pm 644 %{buildroot}%{proton_datadir}/LICENSE.txt %{buildroot}%{proton_licensedir}
+rm -f %{buildroot}%{proton_datadir}/LICENSE.txt
 %endif
 
 # clean up files that are not shipped
@@ -367,6 +367,7 @@ rm -f  %{buildroot}%{proton_datadir}/examples/cpp/selected_recv
 rm -f  %{buildroot}%{proton_datadir}/examples/cpp/server
 rm -f  %{buildroot}%{proton_datadir}/examples/cpp/server_direct
 rm -f  %{buildroot}%{proton_datadir}/examples/cpp/service_bus
+rm -f  %{buildroot}%{proton_datadir}/examples/cpp/simple_connect
 rm -f  %{buildroot}%{proton_datadir}/examples/cpp/simple_recv
 rm -f  %{buildroot}%{proton_datadir}/examples/cpp/simple_send
 rm -f  %{buildroot}%{proton_datadir}/examples/cpp/ssl
@@ -394,6 +395,9 @@ popd
 %endif
 
 %changelog
+* Tue Jul 10 2018 Irina Boverman <iboverma@redhat.com> - 0.24.0-1
+- Rebased to 0.24.0
+
 * Tue Mar 13 2018 Irina Boverman <iboverma@redhat.com> - 0.21.0-1
 - Rebased to 0.21.0
 
