@@ -57,9 +57,6 @@ BuildRequires:  perl(Test::Exception)
 BuildRequires:  perl(Test::More)
 %endif
 BuildRequires:  cyrus-sasl-devel
-BuildRequires:  cyrus-sasl-plain
-BuildRequires:  cyrus-sasl-md5
-BuildRequires:  cyrus-sasl-gssapi 
 
 %description
 Proton is a high performance, lightweight messaging library. It can be used in
@@ -273,12 +270,11 @@ Requires:  qpid-proton-c = %{version}-%{release}
 %if 0%{?fedora}
 export ADDCFLAGS=" -Wno-error=return-type"
 %cmake \
-    -DSYSINSTALL_PYTHON=1 \
-    -DSYSINSTALL_PERL=1 \
     -DSYSINSTALL_BINDINGS=ON \
     -DCMAKE_SKIP_RPATH:BOOL=OFF \
     -DENABLE_FUZZ_TESTING=NO \
-    "-DCMAKE_C_FLAGS=$CFLAGS $ADDCFLAGS" \
+    "-DCMAKE_C_FLAGS=$CMAKE_C_FLAGS $CFLAGS $ADDCFLAGS" \
+     -DCYRUS_SASL_INCLUDE_DIR=/usr/include \
     .
 %endif
 %if 0%{?rhel} && 0%{?rhel} <= 7
@@ -287,7 +283,6 @@ export ADDCFLAGS=" -Wno-error=return-type"
        -DCMAKE_SHARED_LINKER_FLAGS="-Wl,-z,relro" \
        -DCMAKE_MODULE_LINKER_FLAGS="-Wl,-z,relro" \
        -DSYSINSTALL_BINDINGS=ON \
-       -DBUILD_PERL=OFF \
        -DCMAKE_SKIP_RPATH:BOOL=OFF \
        -DENABLE_FUZZ_TESTING=NO \
        .
