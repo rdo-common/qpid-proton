@@ -20,7 +20,7 @@
 
 Name:           qpid-proton
 Version:        0.24.0
-Release:        2%{?dist}
+Release:        1%{?dist}
 Group:          System Environment/Libraries
 Summary:        A high performance, lightweight messaging library
 License:        ASL 2.0
@@ -49,12 +49,7 @@ BuildRequires:  python3-devel
 %endif
 BuildRequires:  epydoc
 %if 0%{?fedora}
-BuildRequires:  perl-devel
-BuildRequires:  perl-generators
 BuildRequires:  glibc-headers
-BuildRequires:  perl(ExtUtils::MakeMaker)
-BuildRequires:  perl(Test::Exception)
-BuildRequires:  perl(Test::More)
 %endif
 BuildRequires:  cyrus-sasl-devel
 
@@ -71,6 +66,7 @@ Group:     System Environment/Libraries
 Summary:   C libraries for Qpid Proton
 Requires:  cyrus-sasl-lib
 Obsoletes: qpid-proton
+Obsoletes: perl-qpid-proton
 
 %description c
 %{summary}.
@@ -193,7 +189,7 @@ Obsoletes: qpid-proton-cpp-devel-docs
 %doc %{proton_datadir}/examples/cpp/ssl-certs
 %doc %{proton_datadir}/examples/cpp/tutorial.dox
 
-
+%if 0%{?rhel} && 0%{?rhel} <= 7
 %package -n %{pythonx}-qpid-proton
 %{?python_provide:%python_provide python2-qpid-proton}
 Group:    System Environment/Libraries
@@ -210,6 +206,7 @@ Requires: %{pythonx}
 %license %{proton_licensedir}/LICENSE.txt
 %license %{proton_licensedir}/licenses.xml
 %{python2_sitearch}/*
+%endif
 
 
 %if 0%{?fedora} || 0%{?rhel} > 7
@@ -244,21 +241,6 @@ Obsoletes:  python-qpid-proton-doc
 %doc %{proton_datadir}/docs/api-py
 %doc %{proton_datadir}/examples/python
 
-%if 0%{?fedora}
-%package -n perl-qpid-proton
-Summary: Perl language bindings for Qpid Proton messaging framework
-
-Requires:  perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
-Requires:  qpid-proton-c = %{version}-%{release}
-
-%description -n perl-qpid-proton
-%{summary}.
-
-%files -n perl-qpid-proton
-%doc LICENSE.txt README*
-%{perl_vendorarch}/*
-%endif
-
 
 %prep
 %setup -q -n %{name}-%{version}
@@ -288,7 +270,8 @@ export ADDCFLAGS=" -Wno-error=return-type"
        .
 %endif
 
-make all docs %{?_smp_mflags}
+#make all docs %{?_smp_mflags}
+make all docs -j1
 %if 0%{?fedora} || 0%{?rhel} > 7
 (cd python/dist; %py3_build)
 %endif
@@ -381,18 +364,9 @@ rm -fr %{buildroot}%{proton_datadir}/examples/php
 
 
 %check
-%if 0%{?fedora}
-# check perl bindings
-pushd proton-c/bindings/perl
-#make test
-popd
-%endif
 
 %changelog
-* Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.24.0-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
-
-* Tue Jul 10 2018 Irina Boverman <iboverma@redhat.com> - 0.24.0-1
+* Tue Jul 24 2018 Irina Boverman <iboverma@redhat.com> - 0.24.0-1
 - Rebased to 0.24.0
 
 * Tue Jul 03 2018 Petr Pisar <ppisar@redhat.com> - 0.21.0-4
