@@ -189,7 +189,6 @@ Obsoletes: qpid-proton-cpp-devel-docs
 %doc %{proton_datadir}/examples/cpp/ssl-certs
 %doc %{proton_datadir}/examples/cpp/tutorial.dox
 
-%if 0%{?rhel} && 0%{?rhel} <= 7
 %package -n %{pythonx}-qpid-proton
 %{?python_provide:%python_provide python2-qpid-proton}
 Group:    System Environment/Libraries
@@ -206,7 +205,6 @@ Requires: %{pythonx}
 %license %{proton_licensedir}/LICENSE.txt
 %license %{proton_licensedir}/licenses.xml
 %{python2_sitearch}/*
-%endif
 
 
 %if 0%{?fedora} || 0%{?rhel} > 7
@@ -249,16 +247,9 @@ Obsoletes:  python-qpid-proton-doc
 
 %build
 
-%if 0%{?fedora}
-export ADDCFLAGS=" -Wno-error=return-type"
-%cmake \
-    -DSYSINSTALL_BINDINGS=ON \
-    -DCMAKE_SKIP_RPATH:BOOL=OFF \
-    -DENABLE_FUZZ_TESTING=NO \
-    "-DCMAKE_C_FLAGS=$CMAKE_C_FLAGS $CFLAGS $ADDCFLAGS" \
-     -DCYRUS_SASL_INCLUDE_DIR=/usr/include \
-    .
-%endif
+mkdir buildpython2
+cd buildpython2
+
 %if 0%{?rhel} && 0%{?rhel} <= 7
 %cmake \
        -DCMAKE_EXE_LINKER_FLAGS="-Wl,-z,relro,-z,now" \
@@ -267,26 +258,63 @@ export ADDCFLAGS=" -Wno-error=return-type"
        -DSYSINSTALL_BINDINGS=ON \
        -DCMAKE_SKIP_RPATH:BOOL=OFF \
        -DENABLE_FUZZ_TESTING=NO \
-       .
+       ..
+%endif
+
+%if 0%{?fedora} || 0%{?rhel} > 7
+export ADDCFLAGS=" -Wno-error=return-type"
+%cmake \
+    -DSYSINSTALL_BINDINGS=ON \
+    -DCMAKE_SKIP_RPATH:BOOL=OFF \
+    -DENABLE_FUZZ_TESTING=NO \
+    "-DCMAKE_C_FLAGS=$CMAKE_C_FLAGS $CFLAGS $ADDCFLAGS" \
+     -DCYRUS_SASL_INCLUDE_DIR=/usr/include \
+     -DPYTHON_EXECUTABLE=/usr/bin/python2.7 \
+     -DPYTHON_INCLUDE_DIR=/usr/include/python2.7/ \
+    "-DPYTHON_LIBRARY=%{_libdir}/libpython2.7.so" \
+    ..
 %endif
 
 #make all docs %{?_smp_mflags}
 make all docs -j1
+
 %if 0%{?fedora} || 0%{?rhel} > 7
+(cd python/dist; %py2_build)
+cd ..
+mkdir buildpython3
+cd buildpython3
+%cmake \
+    -DSYSINSTALL_BINDINGS=ON \
+    -DCMAKE_SKIP_RPATH:BOOL=OFF \
+    -DENABLE_FUZZ_TESTING=NO \
+    "-DCMAKE_C_FLAGS=$CMAKE_C_FLAGS $CFLAGS $ADDCFLAGS" \
+     -DCYRUS_SASL_INCLUDE_DIR=/usr/include \
+    ..
+#make all docs %{?_smp_mflags}
+make all docs -j1
 (cd python/dist; %py3_build)
 %endif
+
 
 %install
 rm -rf %{buildroot}
 
+cd buildpython2
 %make_install
 %if 0%{?fedora} || 0%{?rhel} > 7
+(cd python/dist; %py2_install)
+
+cd ../buildpython3
+%make_install
 (cd python/dist; %py3_install)
 %endif
 
-CPROTON_BUILD=$PWD . ./config.sh
+#CPROTON_BUILD=$PWD . ./config.sh
 
-#chmod +x %{buildroot}%{python_sitearch}/_cproton.so
+chmod +x %{buildroot}%{python2_sitearch}/_cproton.so
+%if 0%{?fedora} || 0%{?rhel} > 7
+chmod +x %{buildroot}%{python3_sitearch}/_cproton.so
+%endif
 #find %{buildroot}%{proton_datadir}/examples/ -type f | xargs chmod -x 
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
@@ -366,6 +394,9 @@ rm -fr %{buildroot}%{proton_datadir}/examples/php
 %check
 
 %changelog
+* Thu Jul 26 2018 Irina Boverman <iboverma@redhat.com> - 0.24.0-2
+- Updated to build both python2- and python3-qpid-proton packages
+
 * Tue Jul 24 2018 Irina Boverman <iboverma@redhat.com> - 0.24.0-1
 - Rebased to 0.24.0
 
