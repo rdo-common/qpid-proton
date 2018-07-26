@@ -20,7 +20,7 @@
 
 Name:           qpid-proton
 Version:        0.24.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Group:          System Environment/Libraries
 Summary:        A high performance, lightweight messaging library
 License:        ASL 2.0
