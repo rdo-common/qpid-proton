@@ -49,12 +49,7 @@ BuildRequires:  python3-devel
 %endif
 BuildRequires:  epydoc
 %if 0%{?fedora}
-BuildRequires:  perl-devel
-BuildRequires:  perl-generators
 BuildRequires:  glibc-headers
-BuildRequires:  perl(ExtUtils::MakeMaker)
-BuildRequires:  perl(Test::Exception)
-BuildRequires:  perl(Test::More)
 %endif
 BuildRequires:  cyrus-sasl-devel
 
@@ -71,13 +66,13 @@ Group:     System Environment/Libraries
 Summary:   C libraries for Qpid Proton
 Requires:  cyrus-sasl-lib
 Obsoletes: qpid-proton
+Obsoletes: perl-qpid-proton
 
 %description c
 %{summary}.
 
 
 %files c
-%defattr(-,root,root,-)
 %dir %{proton_datadir}
 %license %{proton_licensedir}/LICENSE.txt
 %license %{proton_licensedir}/licenses.xml
@@ -100,7 +95,6 @@ Requires:  qpid-proton-c%{?_isa} = %{version}-%{release}
 %{summary}.
 
 %files cpp
-%defattr(-,root,root,-)
 %dir %{proton_datadir}
 %license %{proton_licensedir}/LICENSE.txt
 %license %{proton_licensedir}/licenses.xml
@@ -122,7 +116,6 @@ Obsoletes: qpid-proton-devel
 %{summary}.
 
 %files c-devel
-%defattr(-,root,root,-)
 %{_includedir}/proton
 %exclude %{_includedir}/proton/*.hpp
 %exclude %{_includedir}/proton/**/*.hpp
@@ -145,7 +138,6 @@ Summary:   Development libraries for writing messaging apps with Qpid Proton
 %{summary}.
 
 %files cpp-devel
-%defattr(-,root,root,-)
 %{_includedir}/proton/*.hpp
 %{_includedir}/proton/**/*.hpp
 %{_libdir}/pkgconfig/libqpid-proton-cpp.pc
@@ -197,11 +189,8 @@ Obsoletes: qpid-proton-cpp-devel-docs
 %doc %{proton_datadir}/examples/cpp/ssl-certs
 %doc %{proton_datadir}/examples/cpp/tutorial.dox
 
-
 %package -n %{pythonx}-qpid-proton
-%if 0%{fedora} || 0%{?rhel} > 7
 %{?python_provide:%python_provide python2-qpid-proton}
-%endif
 Group:    System Environment/Libraries
 Summary:  Python language bindings for the Qpid Proton messaging framework
 
@@ -231,7 +220,6 @@ Requires: python3
 %{summary}.
 
 %files -n python3-qpid-proton
-%defattr(-,root,root,-)
 %{python3_sitearch}/*
 %endif
 
@@ -251,21 +239,6 @@ Obsoletes:  python-qpid-proton-doc
 %doc %{proton_datadir}/docs/api-py
 %doc %{proton_datadir}/examples/python
 
-%if 0%{?fedora}
-%package -n perl-qpid-proton
-Summary: Perl language bindings for Qpid Proton messaging framework
-
-Requires:  perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
-Requires:  qpid-proton-c = %{version}-%{release}
-
-%description -n perl-qpid-proton
-%{summary}.
-
-%files -n perl-qpid-proton
-%doc LICENSE.txt README*
-%{perl_vendorarch}/*
-%endif
-
 
 %prep
 %setup -q -n %{name}-%{version}
@@ -274,45 +247,74 @@ Requires:  qpid-proton-c = %{version}-%{release}
 
 %build
 
-%if 0%{?fedora}
-export ADDCXXFLAGS=" -Wno-error=return-type"
-%cmake \
-    -DSYSINSTALL_PYTHON=1 \
-    -DSYSINSTALL_PERL=1 \
-    -DSYSINSTALL_BINDINGS=ON \
-    -DCMAKE_SKIP_RPATH:BOOL=OFF \
-    -DENABLE_FUZZ_TESTING=NO \
-    "-DCMAKE_CXX_FLAGS=$CXXFLAGS $ADDCXXFLAGS" \
-    .
-%endif
+mkdir buildpython2
+cd buildpython2
+
 %if 0%{?rhel} && 0%{?rhel} <= 7
 %cmake \
        -DCMAKE_EXE_LINKER_FLAGS="-Wl,-z,relro,-z,now" \
        -DCMAKE_SHARED_LINKER_FLAGS="-Wl,-z,relro" \
        -DCMAKE_MODULE_LINKER_FLAGS="-Wl,-z,relro" \
        -DSYSINSTALL_BINDINGS=ON \
-       -DBUILD_PERL=OFF \
        -DCMAKE_SKIP_RPATH:BOOL=OFF \
        -DENABLE_FUZZ_TESTING=NO \
-       .
+       ..
 %endif
 
-make all docs %{?_smp_mflags}
 %if 0%{?fedora} || 0%{?rhel} > 7
+export ADDCFLAGS=" -Wno-error=return-type"
+%cmake \
+    -DSYSINSTALL_BINDINGS=ON \
+    -DCMAKE_SKIP_RPATH:BOOL=OFF \
+    -DENABLE_FUZZ_TESTING=NO \
+    "-DCMAKE_C_FLAGS=$CMAKE_C_FLAGS $CFLAGS $ADDCFLAGS" \
+     -DCYRUS_SASL_INCLUDE_DIR=/usr/include \
+     -DPYTHON_EXECUTABLE=/usr/bin/python2.7 \
+     -DPYTHON_INCLUDE_DIR=/usr/include/python2.7/ \
+    "-DPYTHON_LIBRARY=%{_libdir}/libpython2.7.so" \
+    ..
+%endif
+
+#make all docs %{?_smp_mflags}
+make all docs -j1
+
+%if 0%{?fedora} || 0%{?rhel} > 7
+(cd python/dist; %py2_build)
+cd ..
+mkdir buildpython3
+cd buildpython3
+%cmake \
+    -DSYSINSTALL_BINDINGS=ON \
+    -DCMAKE_SKIP_RPATH:BOOL=OFF \
+    -DENABLE_FUZZ_TESTING=NO \
+    "-DCMAKE_C_FLAGS=$CMAKE_C_FLAGS $CFLAGS $ADDCFLAGS" \
+     -DCYRUS_SASL_INCLUDE_DIR=/usr/include \
+    ..
+#make all docs %{?_smp_mflags}
+make all docs -j1
 (cd python/dist; %py3_build)
 %endif
+
 
 %install
 rm -rf %{buildroot}
 
+cd buildpython2
 %make_install
 %if 0%{?fedora} || 0%{?rhel} > 7
+(cd python/dist; %py2_install)
+
+cd ../buildpython3
+%make_install
 (cd python/dist; %py3_install)
 %endif
 
-CPROTON_BUILD=$PWD . ./config.sh
+#CPROTON_BUILD=$PWD . ./config.sh
 
-chmod +x %{buildroot}%{python_sitearch}/_cproton.so
+chmod +x %{buildroot}%{python2_sitearch}/_cproton.so
+%if 0%{?fedora} || 0%{?rhel} > 7
+chmod +x %{buildroot}%{python3_sitearch}/_cproton.so
+%endif
 #find %{buildroot}%{proton_datadir}/examples/ -type f | xargs chmod -x 
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
@@ -390,15 +392,9 @@ rm -fr %{buildroot}%{proton_datadir}/examples/php
 
 
 %check
-%if 0%{?fedora}
-# check perl bindings
-pushd proton-c/bindings/perl
-#make test
-popd
-%endif
 
 %changelog
-* Tue Jul 10 2018 Irina Boverman <iboverma@redhat.com> - 0.24.0-1
+* Fri Jul 27 2018 Irina Boverman <iboverma@redhat.com> - 0.24.0-1
 - Rebased to 0.24.0
 
 * Wed Mar 14 2018 Irina Boverman <iboverma@redhat.com> - 0.21.0-2
