@@ -312,7 +312,7 @@ cd ../buildpython3
 #CPROTON_BUILD=$PWD . ./config.sh
 
 chmod +x %{buildroot}%{python2_sitearch}/_cproton.so
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} && 0%{?fedora} < 29
 chmod +x %{buildroot}%{python3_sitearch}/_cproton.so
 %endif
 #find %{buildroot}%{proton_datadir}/examples/ -type f | xargs chmod -x 
