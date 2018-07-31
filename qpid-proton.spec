@@ -289,6 +289,9 @@ cd buildpython3
     -DENABLE_FUZZ_TESTING=NO \
     "-DCMAKE_C_FLAGS=$CMAKE_C_FLAGS $CFLAGS $ADDCFLAGS" \
      -DCYRUS_SASL_INCLUDE_DIR=/usr/include \
+     -DPYTHON_EXECUTABLE=/usr/bin/python3 \
+     -DPYTHON_INCLUDE_DIR=/usr/include/python3/ \
+    "-DPYTHON_LIBRARY=%{_libdir}/libpython3.so" \
     ..
 #make all docs %{?_smp_mflags}
 make all docs -j1
