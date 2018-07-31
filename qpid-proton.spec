@@ -20,7 +20,7 @@
 
 Name:           qpid-proton
 Version:        0.24.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Group:          System Environment/Libraries
 Summary:        A high performance, lightweight messaging library
 License:        ASL 2.0
@@ -312,7 +312,7 @@ cd ../buildpython3
 #CPROTON_BUILD=$PWD . ./config.sh
 
 chmod +x %{buildroot}%{python2_sitearch}/_cproton.so
-%if 0%{?fedora} && 0%{?fedora} >= 29
+%if 0%{?fedora} || 0%{?rhel} > 7
 chmod +x %{buildroot}%{python3_sitearch}/_cproton.so
 %endif
 #find %{buildroot}%{proton_datadir}/examples/ -type f | xargs chmod -x 
@@ -394,6 +394,9 @@ rm -fr %{buildroot}%{proton_datadir}/examples/php
 %check
 
 %changelog
+* Tue Jul 31 2018 Irina Boverman <iboverma@redhat.com> - 0.24.0-2
+- Updated spec for %{python3_sitearch}/_cproton.so
+
 * Fri Jul 27 2018 Irina Boverman <iboverma@redhat.com> - 0.24.0-1
 - Rebased to 0.24.0
 
