@@ -20,7 +20,7 @@
 
 Name:           qpid-proton
 Version:        0.24.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Group:          System Environment/Libraries
 Summary:        A high performance, lightweight messaging library
 License:        ASL 2.0
@@ -283,12 +283,16 @@ make all docs -j1
 cd ..
 mkdir buildpython3
 cd buildpython3
+python_includes=$(ls -d /usr/include/python3*)
 %cmake \
     -DSYSINSTALL_BINDINGS=ON \
     -DCMAKE_SKIP_RPATH:BOOL=OFF \
     -DENABLE_FUZZ_TESTING=NO \
     "-DCMAKE_C_FLAGS=$CMAKE_C_FLAGS $CFLAGS $ADDCFLAGS" \
      -DCYRUS_SASL_INCLUDE_DIR=/usr/include \
+     -DPYTHON_EXECUTABLE=/usr/bin/python3 \
+    "-DPYTHON_INCLUDE_DIR=$python_includes" \
+    "-DPYTHON_LIBRARY=%{_libdir}/libpython3.so" \
     ..
 #make all docs %{?_smp_mflags}
 make all docs -j1
@@ -394,6 +398,9 @@ rm -fr %{buildroot}%{proton_datadir}/examples/php
 %check
 
 %changelog
+* Tue Jul 31 2018 Irina Boverman <iboverma@redhat.com> - 0.24.0-4
+- Added cmake arguments for python3 build
+
 * Tue Jul 31 2018 Irina Boverman <iboverma@redhat.com> - 0.24.0-3
 - Updated spec for %{python3_sitearch}/_cproton.so
 
@@ -403,14 +410,8 @@ rm -fr %{buildroot}%{proton_datadir}/examples/php
 * Tue Jul 24 2018 Irina Boverman <iboverma@redhat.com> - 0.24.0-1
 - Rebased to 0.24.0
 
-* Tue Jul 03 2018 Petr Pisar <ppisar@redhat.com> - 0.21.0-4
-- Perl 5.28 rebuild
-
-* Thu Jun 28 2018 Jitka Plesnikova <jplesnik@redhat.com> - 0.21.0-3
-- Perl 5.28 rebuild
-
-* Tue Jun 19 2018 Miro Hrončok <mhroncok@redhat.com> - 0.21.0-2
-- Rebuilt for Python 3.7
+* Wed Mar 14 2018 Irina Boverman <iboverma@redhat.com> - 0.21.0-2
+- Updated per changes on master
 
 * Tue Mar 13 2018 Irina Boverman <iboverma@redhat.com> - 0.21.0-1
 - Rebased to 0.21.0
