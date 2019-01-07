@@ -277,11 +277,13 @@ cd buildpython2
 
 %if 0%{?fedora} || 0%{?rhel} > 7
 export ADDCFLAGS=" -Wno-error=return-type"
+export ADDCXXFLAGS=" -Wno-error=format-security"
 %cmake \
     -DSYSINSTALL_BINDINGS=ON \
     -DCMAKE_SKIP_RPATH:BOOL=OFF \
     -DENABLE_FUZZ_TESTING=NO \
     "-DCMAKE_C_FLAGS=$CMAKE_C_FLAGS $CFLAGS $ADDCFLAGS" \
+    "-DCMAKE_CXX_FLAGS=$CMAKE_CXX_FLAGS $CXXFLAGS $ADDCXXFLAGS" \
      -DCYRUS_SASL_INCLUDE_DIR=/usr/include \
      -DPYTHON_EXECUTABLE=/usr/bin/python2.7 \
      -DPYTHON_INCLUDE_DIR=/usr/include/python2.7/ \
@@ -303,6 +305,7 @@ python_includes=$(ls -d /usr/include/python3*)
     -DCMAKE_SKIP_RPATH:BOOL=OFF \
     -DENABLE_FUZZ_TESTING=NO \
     "-DCMAKE_C_FLAGS=$CMAKE_C_FLAGS $CFLAGS $ADDCFLAGS" \
+    "-DCMAKE_CXX_FLAGS=$CMAKE_CXX_FLAGS $CXXFLAGS $ADDCXXFLAGS" \
      -DCYRUS_SASL_INCLUDE_DIR=/usr/include \
      -DPYTHON_EXECUTABLE=/usr/bin/python3 \
     "-DPYTHON_INCLUDE_DIR=$python_includes" \
