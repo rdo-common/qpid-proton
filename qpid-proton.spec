@@ -411,7 +411,7 @@ rm -fr %{buildroot}%{proton_datadir}/examples/javascript
 rm -fr %{buildroot}%{proton_datadir}/examples/ruby
 rm -fr %{buildroot}%{proton_datadir}/examples/perl
 rm -fr %{buildroot}%{proton_datadir}/examples/php
-
+rm -f  %{buildroot}%{proton_datadir}/CMakeLists.txt
 
 %check
 
