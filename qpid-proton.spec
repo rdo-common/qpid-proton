@@ -323,15 +323,18 @@ cd buildpython2
 cd ../buildpython3
 %make_install
 (cd python/dist; %py3_install)
+find %{buildroot}%{proton_datadir}/examples/python -name "*.py" -exec sed -i.original 's/!\/usr\/bin\/env python/!\/usr\/bin\/python3/' {} \;
+sed -i.original 's/!\/usr\/bin\/python/!\/usr\/bin\/python3/' %{buildroot}%{proton_datadir}/examples/c/testme
+sed -i.original 's/!\/usr\/bin\/python/!\/usr\/bin\/python3/' %{buildroot}%{proton_datadir}/examples/cpp/testme
+echo '#!/usr/bin/python3' > %{buildroot}%{proton_datadir}/examples/python/proton_server.py.original
+cat %{buildroot}%{proton_datadir}/examples/python/proton_server.py >> %{buildroot}%{proton_datadir}/examples/python/proton_server.py.original
+cp %{buildroot}%{proton_datadir}/examples/python/proton_server.py.original %{buildroot}%{proton_datadir}/examples/python/proton_server.py
 %endif
-
-#CPROTON_BUILD=$PWD . ./config.sh
 
 chmod +x %{buildroot}%{python2_sitearch}/_cproton.so
 %if 0%{?fedora} || 0%{?rhel} > 7
 chmod +x %{buildroot}%{python3_sitearch}/_cproton.so
 %endif
-#find %{buildroot}%{proton_datadir}/examples/ -type f | xargs chmod -x 
 
 %if 0%{?rhel} && 0%{?rhel} <= 6
 install -pm 644 %{SOURCE1} %{buildroot}%{proton_datadir}/
