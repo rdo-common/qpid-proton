@@ -3,7 +3,7 @@
   <dependencies>
     <dependency>
       <packageName>qpid-proton</packageName>
-      <version>0.24.0</version>
+      <version>0.26.0</version>
       <licenses>
         <license>
           <name>ASL 2.0</name>

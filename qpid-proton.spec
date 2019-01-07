@@ -19,15 +19,15 @@
 %{!?__python2:%global pythonx python}
 
 Name:           qpid-proton
-Version:        0.24.0
-Release:        4%{?dist}
+Version:        0.26.0
+Release:        1%{?dist}
 Group:          System Environment/Libraries
 Summary:        A high performance, lightweight messaging library
 License:        ASL 2.0
 URL:            http://qpid.apache.org/proton/
 
 Source0:        %{name}-%{version}.tar.gz
-#Patch0:         proton.patch
+Patch0:         proton.patch
 
 Source1:        licenses.xml
 
@@ -52,6 +52,7 @@ BuildRequires:  epydoc
 BuildRequires:  glibc-headers
 %endif
 BuildRequires:  cyrus-sasl-devel
+BuildRequires:  jsoncpp-devel
 
 %description
 Proton is a high performance, lightweight messaging library. It can be used in
@@ -90,6 +91,7 @@ Obsoletes: perl-qpid-proton
 Group:     System Environment/Libraries
 Summary:   C++ libraries for Qpid Proton
 Requires:  qpid-proton-c%{?_isa} = %{version}-%{release} 
+Requires:  jsoncpp
 
 %description cpp
 %{summary}.
@@ -159,12 +161,13 @@ Obsoletes: qpid-proton-c-devel-docs
 %license %{proton_licensedir}/LICENSE.txt
 %license %{proton_licensedir}/licenses.xml
 %doc %{proton_datadir}/docs/api-c
+%doc %{proton_datadir}/examples/README.md
 %doc %{proton_datadir}/examples/c/ssl-certs
 %doc %{proton_datadir}/examples/c/*.c
 %doc %{proton_datadir}/examples/c/*.h
 %doc %{proton_datadir}/examples/c/README.dox
 %doc %{proton_datadir}/examples/c/CMakeLists.txt
-%doc %{proton_datadir}/examples/c/example_test.py*
+%doc %{proton_datadir}/examples/c/testme*
 
 
 %package   cpp-docs
@@ -185,9 +188,10 @@ Obsoletes: qpid-proton-cpp-devel-docs
 %doc %{proton_datadir}/examples/cpp/*.hpp
 %doc %{proton_datadir}/examples/cpp/README.dox
 %doc %{proton_datadir}/examples/cpp/CMakeLists.txt
-%doc %{proton_datadir}/examples/cpp/example_test.py*
+%doc %{proton_datadir}/examples/cpp/testme*
 %doc %{proton_datadir}/examples/cpp/ssl-certs
 %doc %{proton_datadir}/examples/cpp/tutorial.dox
+
 
 %package -n %{pythonx}-qpid-proton
 %{?python_provide:%python_provide python2-qpid-proton}
@@ -240,9 +244,19 @@ Obsoletes:  python-qpid-proton-doc
 %doc %{proton_datadir}/examples/python
 
 
+%package tests
+Group:     Documentation
+Summary:   Qpid Proton Tests
+BuildArch: noarch
+%description tests
+%{summary}.
+
+%files tests
+%doc %{proton_datadir}/tests
+
 %prep
 %setup -q -n %{name}-%{version}
-#%patch0 -p1
+%patch0 -p1
 
 
 %build
@@ -398,6 +412,9 @@ rm -fr %{buildroot}%{proton_datadir}/examples/php
 %check
 
 %changelog
+* Mon Jan  7 2019 Irina Boverman <iboverma@redhat.com> - 0.26.0-1
+- Rebased to 0.26.0
+
 * Tue Jul 31 2018 Irina Boverman <iboverma@redhat.com> - 0.24.0-4
 - Added cmake arguments for python3 build
 
