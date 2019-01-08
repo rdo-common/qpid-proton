@@ -323,15 +323,12 @@ cd buildpython2
 cd ../buildpython3
 %make_install
 (cd python/dist; %py3_install)
-find %{buildroot}%{proton_datadir}/examples/python -name "*.py" -exec sed -i.original 's/!\/usr\/bin\/env python/!\/usr\/bin\/python3/' {} \;
-sed -i.original 's/!\/usr\/bin\/python/!\/usr\/bin\/python3/' %{buildroot}%{proton_datadir}/examples/c/testme
-sed -i.original 's/!\/usr\/bin\/python/!\/usr\/bin\/python3/' %{buildroot}%{proton_datadir}/examples/cpp/testme
+find %{buildroot}%{proton_datadir}/examples/python -name "*.py" -exec sed -i 's/!\/usr\/bin\/env python/!\/usr\/bin\/python3/' {} \;
+sed -i 's/!\/usr\/bin\/python/!\/usr\/bin\/python3/' %{buildroot}%{proton_datadir}/examples/c/testme
+sed -i 's/!\/usr\/bin\/python/!\/usr\/bin\/python3/' %{buildroot}%{proton_datadir}/examples/cpp/testme
 echo '#!/usr/bin/python3' > %{buildroot}%{proton_datadir}/examples/python/proton_server.py.original
 cat %{buildroot}%{proton_datadir}/examples/python/proton_server.py >> %{buildroot}%{proton_datadir}/examples/python/proton_server.py.original
-cp %{buildroot}%{proton_datadir}/examples/python/proton_server.py.original %{buildroot}%{proton_datadir}/examples/python/proton_server.py
-rm -f  %{buildroot}%{proton_datadir}/examples/python/*.original
-rm -f  %{buildroot}%{proton_datadir}/examples/c/*.original
-rm -f  %{buildroot}%{proton_datadir}/examples/cpp/*.original
+mv %{buildroot}%{proton_datadir}/examples/python/proton_server.py.original %{buildroot}%{proton_datadir}/examples/python/proton_server.py
 %endif
 
 chmod +x %{buildroot}%{python2_sitearch}/_cproton.so
