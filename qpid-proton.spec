@@ -82,9 +82,7 @@ Obsoletes: perl-qpid-proton
 %{_libdir}/libqpid-proton-core.so.*
 %{_libdir}/libqpid-proton-proactor.so.*
 
-%post c -p /sbin/ldconfig
-
-%postun c -p /sbin/ldconfig
+%ldconfig_scriptlets c
 
 
 %package   cpp
@@ -103,9 +101,7 @@ Requires:  jsoncpp
 %doc %{proton_datadir}/README*
 %{_libdir}/libqpid-proton-cpp.so.*
 
-%post cpp -p /sbin/ldconfig
-
-%postun cpp -p /sbin/ldconfig
+%ldconfig_scriptlets cpp
 
 
 %package c-devel
