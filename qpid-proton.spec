@@ -21,7 +21,6 @@
 Name:           qpid-proton
 Version:        0.26.0
 Release:        1%{?dist}
-Group:          System Environment/Libraries
 Summary:        A high performance, lightweight messaging library
 License:        ASL 2.0
 URL:            http://qpid.apache.org/proton/
@@ -63,7 +62,6 @@ from any platform, environment, or language.
 
 
 %package c
-Group:     System Environment/Libraries
 Summary:   C libraries for Qpid Proton
 Requires:  cyrus-sasl-lib
 Obsoletes: qpid-proton
@@ -86,7 +84,6 @@ Obsoletes: perl-qpid-proton
 
 
 %package   cpp
-Group:     System Environment/Libraries
 Summary:   C++ libraries for Qpid Proton
 Requires:  qpid-proton-c%{?_isa} = %{version}-%{release} 
 Requires:  jsoncpp
@@ -105,7 +102,6 @@ Requires:  jsoncpp
 
 
 %package c-devel
-Group:     Development/System
 Requires:  qpid-proton-c%{?_isa} = %{version}-%{release}
 Summary:   Development libraries for writing messaging apps with Qpid Proton
 Obsoletes: qpid-proton-devel
@@ -127,7 +123,6 @@ Obsoletes: qpid-proton-devel
 
 
 %package cpp-devel
-Group:     Development/System
 Requires:  qpid-proton-cpp%{?_isa} = %{version}-%{release}
 Requires:  qpid-proton-c-devel%{?_isa} = %{version}-%{release}
 Summary:   Development libraries for writing messaging apps with Qpid Proton
@@ -191,7 +186,6 @@ Obsoletes: qpid-proton-cpp-devel-docs
 
 %package -n %{pythonx}-qpid-proton
 %{?python_provide:%python_provide python2-qpid-proton}
-Group:    System Environment/Libraries
 Summary:  Python language bindings for the Qpid Proton messaging framework
 
 Requires: qpid-proton-c%{?_isa} = %{version}-%{release}
@@ -209,7 +203,6 @@ Requires: %{pythonx}
 
 %if 0%{?fedora} || 0%{?rhel} > 7
 %package -n python3-qpid-proton
-Group:    System Environment/Libraries
 Summary:  Python language bindings for the Qpid Proton messaging framework
 %{?python_provide:%python_provide python3-qpid-proton}
 
@@ -224,7 +217,6 @@ Requires: python3
 %endif
 
 %package -n python-qpid-proton-docs
-Group:     Documentation
 Summary:   Documentation for the Python language bindings for Qpid Proton
 BuildArch: noarch
 Obsoletes:  python-qpid-proton-doc
@@ -241,7 +233,6 @@ Obsoletes:  python-qpid-proton-doc
 
 
 %package tests
-Group:     Documentation
 Summary:   Qpid Proton Tests
 BuildArch: noarch
 %description tests
