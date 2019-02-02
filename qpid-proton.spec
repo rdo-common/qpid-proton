@@ -20,7 +20,7 @@
 
 Name:           qpid-proton
 Version:        0.26.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A high performance, lightweight messaging library
 License:        ASL 2.0
 URL:            http://qpid.apache.org/proton/
@@ -400,6 +400,9 @@ rm -f  %{buildroot}%{proton_datadir}/CMakeLists.txt
 %check
 
 %changelog
+* Sat Feb 02 2019 Fedora Release Engineering <releng@fedoraproject.org> - 0.26.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
 * Mon Jan  7 2019 Irina Boverman <iboverma@redhat.com> - 0.26.0-1
 - Rebased to 0.26.0
 
